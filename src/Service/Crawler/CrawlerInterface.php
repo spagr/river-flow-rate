@@ -10,5 +10,5 @@ interface CrawlerInterface
 {
     public function __construct(HttpClientInterface $client);
 
-    public function getFlows(int $riverId);
+    public function getFlows(int $stationId);
 }

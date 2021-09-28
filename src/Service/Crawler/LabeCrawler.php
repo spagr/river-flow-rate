@@ -9,11 +9,14 @@ use App\Entity\Flow;
 use App\Service\Crawler\Exception\CrawlerClientException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LabeCrawler implements CrawlerInterface
 {
-    public const HORNI_LANOV_PLACE_ID = 228;
     public const RIVER_ID = 1;
 
     private const RIVER_URL = 'http://www.pla.cz/portal/sap/cz/PC/Mereni.aspx?id=%s&oid=1';
@@ -26,6 +29,12 @@ class LabeCrawler implements CrawlerInterface
 
     /**
      * @return array<Flow>
+     *
+     * @throws CrawlerClientException
+     * @throws ClientExceptionInterface
+     * @throws RedirectionExceptionInterface
+     * @throws ServerExceptionInterface
+     * @throws TransportExceptionInterface
      */
     public function getFlows(int $stationId): array
     {
