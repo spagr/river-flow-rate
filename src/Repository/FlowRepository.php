@@ -21,32 +21,17 @@ class FlowRepository extends ServiceEntityRepository
         parent::__construct($registry, Flow::class);
     }
 
-    // /**
-    //  * @return Flow[] Returns an array of Flow objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findLastFlow(int $riverId, int $stationId): ?Flow
     {
         return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Flow
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
+            ->andWhere('f.riverId = :riverId')
+            ->andWhere('f.stationId = :stationId')
+            ->setParameter('riverId', $riverId)
+            ->setParameter('stationId', $stationId)
+            ->orderBy('f.datetime', 'DESC')
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
         ;
     }
-    */
 }

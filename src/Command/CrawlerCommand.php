@@ -43,12 +43,7 @@ class CrawlerCommand extends Command
         $stationId = (int) $input->getArgument('stationId');
         $crawler = $this->crawlerFactory->createRiverCrawler($riverId);
         $flows = $crawler->getFlows($stationId);
-        $lastFlow = $this->flowRepository->findOneBy([
-            'riverId' => $riverId,
-            'stationId' => $stationId,
-        ], [
-            'datetime' => 'DESC',
-        ]);
+        $lastFlow = $this->flowRepository->findLastFlow($riverId, $stationId);
 
         foreach ($flows as $flow) {
             $output->write(
