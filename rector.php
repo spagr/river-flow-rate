@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Core\Configuration\Option;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
+use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\Set\ValueObject\SetList;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -16,6 +16,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     ]);
 
     // Define what rule sets will be applied
+
     $containerConfigurator->import(SetList::PHP_70);
     $containerConfigurator->import(SetList::PHP_71);
     $containerConfigurator->import(SetList::PHP_72);
@@ -23,7 +24,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->import(SetList::PHP_74);
     $containerConfigurator->import(SetList::PHP_80);
 
-     $services = $containerConfigurator->services();
+    $containerConfigurator->import(DoctrineSetList::DOCTRINE_CODE_QUALITY);
+    $containerConfigurator->import(DoctrineSetList::ENTITY_ANNOTATIONS_TO_ATTRIBUTES);
 
-     $services->set(TypedPropertyRector::class);
+    /*
+    $services = $containerConfigurator->services();
+    $services->set(TypedPropertyRector::class);
+    */
 };
