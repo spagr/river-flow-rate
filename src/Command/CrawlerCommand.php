@@ -7,6 +7,7 @@ namespace App\Command;
 use App\Repository\FlowRepository;
 use App\Service\Crawler\CrawlerFactory;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -23,6 +24,7 @@ class CrawlerCommand extends Command
         private EntityManagerInterface $entityManager,
         private CrawlerFactory $crawlerFactory,
         private FlowRepository $flowRepository,
+        private LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -50,12 +52,17 @@ class CrawlerCommand extends Command
 
         foreach ($flows as $flow) {
             $output->write(
-                sprintf('Flow from %s is %s m3/s, saving: ', $flow->getDatetime()->format(DATE_ATOM), $flow->getFlow())
+                sprintf('Flow at %s is %s m3/s, saving: ', $flow->getDatetime()->format(DATE_ATOM), $flow->getFlow())
             );
 
             if ($lastFlow === null || $flow->getDatetime() > $lastFlow->getDatetime()) {
                 $this->entityManager->persist($flow);
                 $output->writeln('<info>OK</info>');
+                $this->logger->info(
+                    sprintf('Flow at %s is %s m3/s, water level %s cm ', $flow->getDatetime()->format(
+                        DATE_ATOM
+                    ), $flow->getFlow(), $flow->getLevel())
+                );
             } else {
                 $output->writeln('<error>already exist</error>');
             }
