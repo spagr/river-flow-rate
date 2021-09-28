@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@symfony/webpack-encore": "^1.0.0"
+  }
+}
