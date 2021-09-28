@@ -6,9 +6,13 @@ namespace App\Entity;
 
 use App\Repository\FlowRepository;
 use DateTimeImmutable;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\UniqueConstraint;
 
-#[\Doctrine\ORM\Mapping\Entity(repositoryClass: FlowRepository::class)]
-#[\Doctrine\ORM\Mapping\Table(name: 'flows', uniqueConstraints: ['(name="flow_record_idx", columns={"datetime", "station_id", "river_id"})'])]
+#[Entity(repositoryClass: FlowRepository::class)]
+#[Table(name: 'flows')]
+#[UniqueConstraint(name: 'flow_record_idx', columns: ['datetime', 'station_id', 'river_id'])]
 class Flow
 {
     public function __construct(
@@ -38,7 +42,7 @@ class Flow
         return $this->id;
     }
 
-    public function getDatetime(): ?DateTimeImmutable
+    public function getDatetime(): DateTimeImmutable
     {
         return $this->datetime;
     }
@@ -53,7 +57,7 @@ class Flow
         return $this->flow;
     }
 
-    public function getCreatedAt(): ?DateTimeImmutable
+    public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
     }

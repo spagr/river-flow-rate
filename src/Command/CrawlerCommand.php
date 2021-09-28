@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Repository\FlowRepository;
 use App\Service\Crawler\CrawlerFactory;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -22,9 +22,9 @@ class CrawlerCommand extends Command
     public function __construct(
         private EntityManagerInterface $entityManager,
         private CrawlerFactory $crawlerFactory,
-        private ManagerRegistry $managerRegistry,
+        private FlowRepository $flowRepository,
     ) {
-        parent::__construct(null);
+        parent::__construct();
     }
 
     protected function configure(): void
@@ -41,19 +41,27 @@ class CrawlerCommand extends Command
         $stationId = (int) $input->getArgument('stationId');
         $crawler = $this->crawlerFactory->createRiverCrawler($riverId);
         $flows = $crawler->getFlows($stationId);
+        $lastFlow = $this->flowRepository->findOneBy([
+            'riverId' => $riverId,
+            'stationId' => $stationId,
+        ], [
+            'datetime' => 'DESC',
+        ]);
 
         foreach ($flows as $flow) {
-            $output->write(sprintf('Flow from %s is %s m3/s, saving: ', $flow->getDatetime()->format(DATE_ATOM), $flow->getFlow()));
+            $output->write(
+                sprintf('Flow from %s is %s m3/s, saving: ', $flow->getDatetime()->format(DATE_ATOM), $flow->getFlow())
+            );
 
-            try {
+            if ($lastFlow === null || $flow->getDatetime() > $lastFlow->getDatetime()) {
                 $this->entityManager->persist($flow);
-                $this->entityManager->flush();
                 $output->writeln('<info>OK</info>');
-            } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException) {
-                $output->writeln('<error>Duplication</error>');
-                $this->managerRegistry->resetManager();
+            } else {
+                $output->writeln('<error>already exist</error>');
             }
         }
+
+        $this->entityManager->flush();
 
         return Command::SUCCESS;
     }

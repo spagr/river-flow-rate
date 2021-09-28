@@ -14,6 +14,9 @@ class CrawlerFactory
     ) {
     }
 
+    /**
+     * @throws NotImplementedException
+     */
     public function createRiverCrawler(int $riverId): CrawlerInterface
     {
         $crawler = match ($riverId) {
@@ -21,7 +24,7 @@ class CrawlerFactory
             default => null,
         };
 
-        if (null === $crawler) {
+        if ($crawler === null) {
             throw new NotImplementedException('This river has no crawler implemented yet.');
         }
 
