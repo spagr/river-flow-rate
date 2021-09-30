@@ -38,7 +38,7 @@ class Flow
         return $this->id;
     }
 
-    public function getDatetime(): ?DateTimeImmutable
+    public function getDatetime(): DateTimeImmutable
     {
         return $this->datetime;
     }

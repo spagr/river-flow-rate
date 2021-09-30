@@ -18,6 +18,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class LabeCrawler implements CrawlerInterface
 {
     public const RIVER_ID = 1;
+    public const LANOV_STATION_ID = 228;
 
     private const RIVER_URL = 'http://www.pla.cz/portal/sap/cz/PC/Mereni.aspx?id=%s&oid=1';
     private const XPATH_FLOW_TABLE_ROWS = '//*[@id="ObsahCPH_DataMereniGV"]/tr[position()>1]';
