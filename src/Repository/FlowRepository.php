@@ -38,13 +38,13 @@ class FlowRepository extends ServiceEntityRepository
     /**
      * @return Flow[] Returns an array of Flow objects
      */
-    public function findLastStationFlows(int $stationId): array
+    public function findLastStationFlows(int $stationId, int $limit = 100): array
     {
         return $this->createQueryBuilder('f')
             ->andWhere('f.stationId = :stationId')
             ->setParameter('stationId', $stationId)
             ->orderBy('f.datetime', 'DESC')
-            ->setMaxResults(100)
+            ->setMaxResults($limit)
             ->getQuery()
             ->getResult()
             ;

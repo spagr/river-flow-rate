@@ -9,10 +9,6 @@ use App\Entity\Flow;
 use App\Service\Crawler\Exception\CrawlerClientException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class LabeCrawler implements CrawlerInterface
@@ -29,12 +25,6 @@ class LabeCrawler implements CrawlerInterface
     }
 
     /**
-     * @throws CrawlerClientException
-     * @throws ClientExceptionInterface
-     * @throws RedirectionExceptionInterface
-     * @throws ServerExceptionInterface
-     * @throws TransportExceptionInterface
-     *
      * @return array<Flow>
      */
     public function getFlows(int $stationId): array

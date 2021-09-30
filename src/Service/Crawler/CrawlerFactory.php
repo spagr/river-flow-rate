@@ -14,9 +14,6 @@ class CrawlerFactory
     ) {
     }
 
-    /**
-     * @throws NotImplementedException
-     */
     public function createRiverCrawler(int $riverId): CrawlerInterface
     {
         $crawler = match ($riverId) {
