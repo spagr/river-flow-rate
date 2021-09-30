@@ -23,14 +23,18 @@ class HomeController extends AbstractController
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
         $chart->setData([
             //'labels' => ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            'labels' => array_map(static fn (Flow $flow): string => $flow->getDatetime()->format('Y-m-d H:i:s'), $flows),
+            'labels' => array_map(
+                static fn (Flow $flow): string => $flow->getDatetime()->format('Y-m-d H:i:s'),
+                $flows
+            ),
             'datasets' => [
                 [
                     'label' => 'Flow',
                     'backgroundColor' => '#6495ED',
                     'borderColor' => '#FF7F50',
                     'data' => array_map(static fn (Flow $flow): array => [
-                        'x' => $flow->getDatetime()->format('Y-m-d H:i:s'),
+                        'x' => $flow->getDatetime()
+                            ->format('Y-m-d H:i:s'),
                         'y' => $flow->getFlow(),
                     ], $flows),
                 ],
