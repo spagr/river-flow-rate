@@ -34,4 +34,19 @@ class FlowRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
+
+    /**
+     * @return Flow[] Returns an array of Flow objects
+     */
+    public function findLastStationFlows(int $stationId): array
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.stationId = :stationId')
+            ->setParameter('stationId', $stationId)
+            ->orderBy('f.datetime', 'DESC')
+            ->setMaxResults(100)
+            ->getQuery()
+            ->getResult()
+            ;
+    }
 }
