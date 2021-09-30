@@ -21,6 +21,20 @@ class FlowRepository extends ServiceEntityRepository
         parent::__construct($registry, Flow::class);
     }
 
+    public function findLastFlow(int $riverId, int $stationId): ?Flow
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.riverId = :riverId')
+            ->andWhere('f.stationId = :stationId')
+            ->setParameter('riverId', $riverId)
+            ->setParameter('stationId', $stationId)
+            ->orderBy('f.datetime', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     /**
      * @return Flow[] Returns an array of Flow objects
      */
@@ -33,6 +47,6 @@ class FlowRepository extends ServiceEntityRepository
             ->setMaxResults(100)
             ->getQuery()
             ->getResult()
-        ;
+            ;
     }
 }

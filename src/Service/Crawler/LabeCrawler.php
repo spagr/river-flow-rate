@@ -29,19 +29,19 @@ class LabeCrawler implements CrawlerInterface
     }
 
     /**
-     * @return array<Flow>
-     *
      * @throws CrawlerClientException
      * @throws ClientExceptionInterface
      * @throws RedirectionExceptionInterface
      * @throws ServerExceptionInterface
      * @throws TransportExceptionInterface
+     *
+     * @return array<Flow>
      */
     public function getFlows(int $stationId): array
     {
         $response = $this->client->request('GET', sprintf(self::RIVER_URL, $stationId));
 
-        if (Response::HTTP_OK !== $response->getStatusCode()) {
+        if ($response->getStatusCode() !== Response::HTTP_OK) {
             throw new CrawlerClientException('Returned HTTP code is not 200.');
         }
 
